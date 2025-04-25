@@ -51,3 +51,15 @@ export default function Home() {
     </HomeContainer>
   );
 }
+
+export const getServerSideProps = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  console.log("rodou");
+
+  return {
+    props: {
+      list: [1, 2, 3],
+    },
+  };
+};
