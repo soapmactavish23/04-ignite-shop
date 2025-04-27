@@ -4,9 +4,8 @@ import {
   ProductContainer,
   ProductDetails,
 } from "@/styles/pages/product";
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import Stripe from "stripe";
 
 interface ProductProps {
@@ -16,10 +15,15 @@ interface ProductProps {
     imageUrl: string;
     price: string | null;
     description: string;
+    defaultPriceId: string;
   };
 }
 
 export default function Product({ product }: ProductProps) {
+  function handleBuyProduct() {
+    console.log(product.defaultPriceId);
+  }
+
   return (
     <ProductContainer>
       <ImageContainer>
@@ -32,7 +36,7 @@ export default function Product({ product }: ProductProps) {
 
         <p>{product.description}</p>
 
-        <button>Comprar Agora</button>
+        <button onClick={handleBuyProduct}>Comprar Agora</button>
       </ProductDetails>
     </ProductContainer>
   );
@@ -67,6 +71,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
           style: "currency",
           currency: "BRL",
         }).format(price.unit_amount / 100),
+        defaultPriceId: price.id,
       },
       description: product.description,
     },
